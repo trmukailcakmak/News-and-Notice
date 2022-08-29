@@ -12,9 +12,6 @@ import Profile from "./components/ProfileComponent";
 
 import EventBus from "./common/EventBus";
 
-import AddTutorial from "./components/tutorials/add-tutorial.component";
-import Tutorial from "./components/tutorials/tutorial.component";
-import TutorialsList from "./components/tutorials/tutorials-list.component";
 import AddNews from "./components/news/add-news.component";
 import NewsList from "./components/news/news-list.component";
 import NewsComponent from "./components/news/news.component";
@@ -115,21 +112,6 @@ class App extends Component<Props, State> {
           </div>
 
           {currentUser ? (
-                  <div className="navbar-nav mr-auto">
-                    <li className="nav-item">
-                      <Link to={"/tutorials"} className="nav-link">
-                        Dersler
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to={"/add"} className="nav-link">
-                        DersEkle
-                      </Link>
-                    </li>
-                  </div>):
-              (<div></div>)}
-
-          {currentUser ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link to={"/profile"} className="nav-link">
@@ -164,10 +146,6 @@ class App extends Component<Props, State> {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
-
-            <Route exact path={["/tutorials"]} component={TutorialsList} />
-            <Route exact path="/add" component={AddTutorial} />
-            <Route path="/tutorials/:id" component={Tutorial} />
 
             <Route exact path={["/", "/newsList"]} component={NewsList} />
             <Route exact path="/addNews" component={AddNews} />
