@@ -28,7 +28,7 @@ class NewsDataService {
   }
 
   findByTitle(title: string) {
-    return http.get<Array<INewsData>>(`/news?title=${title}`);
+    return http.get<Array<INewsData>>(`/api/news/search/${title}`);
   }
 }
 

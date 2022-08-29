@@ -141,7 +141,7 @@ class App extends Component<Props, State> {
           )}
         </nav>
 
-        <div className="container mt-3">
+        <div id="all" className="container mt-3">
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
@@ -149,7 +149,7 @@ class App extends Component<Props, State> {
 
             <Route exact path={["/", "/newsList"]} component={NewsList} />
             <Route exact path="/addNews" component={AddNews} />
-            <Route path="/news/:id" component={NewsComponent} />
+            {currentUser && (<Route path="/news/:id" component={NewsComponent} />)}
 
             <Route exact path={["/noticeList"]} component={NoticeList} />
             <Route exact path="/addNotice" component={AddNotice} />

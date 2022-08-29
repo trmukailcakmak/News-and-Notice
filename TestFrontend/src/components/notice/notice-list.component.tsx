@@ -2,14 +2,18 @@ import { Component, ChangeEvent } from "react";
 import NoticeDataService from "../../services/notice.service";
 import { Link } from "react-router-dom";
 import INoticeData from '../../types/notice.type';
+import IUser from "../../types/user.type";
+import AuthService from "../../services/auth.service";
+import Swal from "sweetalert2";
 
 type Props = {};
 
 type State = {
-  news: Array<INoticeData>,
+  notice: Array<INoticeData>,
   current: INoticeData | null,
   currentIndex: number,
-  searchTitle: string
+  searchTitle: string,
+  currentUser : IUser | undefined
 };
 
 export default class NoticeList extends Component<Props, State>{
@@ -23,15 +27,22 @@ export default class NoticeList extends Component<Props, State>{
     this.searchTitle = this.searchTitle.bind(this);
 
     this.state = {
-      news: [],
+      notice: [],
       current: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchTitle: "",
+      currentUser : undefined
     };
   }
 
   componentDidMount() {
     this.retrieve();
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user
+      });
+    }
   }
 
   onChangeSearchTitle(e: ChangeEvent<HTMLInputElement>) {
@@ -46,7 +57,7 @@ export default class NoticeList extends Component<Props, State>{
     NoticeDataService.getAll()
       .then((response: any) => {
         this.setState({
-          news: response.data
+          notice: response.data
         });
         console.log(response.data);
       })
@@ -63,9 +74,9 @@ export default class NoticeList extends Component<Props, State>{
     });
   }
 
-  setActive(news: INoticeData, index: number) {
+  setActive(notice: INoticeData, index: number) {
     this.setState({
-      current: news,
+      current: notice,
       currentIndex: index
     });
   }
@@ -90,7 +101,7 @@ export default class NoticeList extends Component<Props, State>{
     NoticeDataService.findByTitle(this.state.searchTitle)
       .then((response: any) => {
         this.setState({
-          news: response.data
+          notice: response.data
         });
         console.log(response.data);
       })
@@ -99,8 +110,19 @@ export default class NoticeList extends Component<Props, State>{
       });
   }
 
+  popup(notice:INoticeData){
+    Swal.fire({
+      title: notice.title,
+      text: notice.description,
+      imageUrl: 'https://unsplash.it/400/200',
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: 'Custom image',
+    })
+  }
+
   render() {
-    const { searchTitle, news, current, currentIndex } = this.state;
+    const { currentUser,searchTitle, notice, current, currentIndex } = this.state;
 
     return (
       <div className="list row">
@@ -128,30 +150,32 @@ export default class NoticeList extends Component<Props, State>{
           <h4>Notice List</h4>
 
           <ul className="list-group">
-            {news &&
-              news.map((news: INoticeData, index: number) => (
+            {notice &&
+              notice.map((notice: INoticeData, index: number) => (
                 <li
                   className={
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => this.setActive(news, index)}
+                  onClick={() => currentUser ? (this.setActive(notice, index)):(this.popup(notice))}
                   key={index}
                 >
-                  {news.title}
+                  {notice.title}
                 </li>
               ))}
           </ul>
 
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAll}
+          {currentUser ? (<button
+              className="m-3 btn btn-sm btn-danger"
+              onClick={this.removeAll}
           >
             Remove All
-          </button>
+          </button>):(<div/>)}
+
         </div>
         <div className="col-md-6">
           {current ? (
+              currentUser ? (
             <div>
               <h4>Notice</h4>
               <div>
@@ -180,7 +204,7 @@ export default class NoticeList extends Component<Props, State>{
                 Edit
               </Link>
             </div>
-          ) : (
+              ):(<div/>)) : (
             <div>
               <br />
               <p>Please click on a Notice...</p>

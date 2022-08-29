@@ -2,14 +2,19 @@ import { Component, ChangeEvent } from "react";
 import NewsDataService from "../../services/news.service";
 import { Link } from "react-router-dom";
 import INewsData from '../../types/news.type';
+import IUser from "../../types/user.type";
+import AuthService from "../../services/auth.service";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Swal from "sweetalert2";
 
-type Props = {};
+type Props = { };
 
 type State = {
   news: Array<INewsData>,
   current: INewsData | null,
   currentIndex: number,
-  searchTitle: string
+  searchTitle: string,
+  currentUser : IUser | undefined
 };
 
 export default class NewsList extends Component<Props, State>{
@@ -26,12 +31,19 @@ export default class NewsList extends Component<Props, State>{
       news: [],
       current: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchTitle: "",
+      currentUser : undefined
     };
   }
 
   componentDidMount() {
     this.retrieve();
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user
+      });
+    }
   }
 
   onChangeSearchTitle(e: ChangeEvent<HTMLInputElement>) {
@@ -99,8 +111,21 @@ export default class NewsList extends Component<Props, State>{
       });
   }
 
+  popup(news:INewsData){
+    Swal.fire({
+      title: news.title,
+      text: news.description,
+      imageUrl: 'https://unsplash.it/400/200',
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: 'Custom image',
+    })
+  }
+
+
   render() {
-    const { searchTitle, news, current, currentIndex } = this.state;
+
+    const { currentUser,searchTitle, news, current, currentIndex } = this.state;
 
     return (
       <div className="list row">
@@ -135,7 +160,7 @@ export default class NewsList extends Component<Props, State>{
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => this.setActive(news, index)}
+                  onClick={() => currentUser ? (this.setActive(news, index)):(this.popup(news))}
                   key={index}
                 >
                   {news.title}
@@ -143,43 +168,50 @@ export default class NewsList extends Component<Props, State>{
               ))}
           </ul>
 
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAll}
+          {currentUser ?(<button
+              className="m-3 btn btn-sm btn-danger"
+              onClick={this.removeAll}
           >
             Remove All
-          </button>
+          </button>):(<div/>)}
+
+
         </div>
         <div className="col-md-6">
           {current ? (
-            <div>
-              <h4>News</h4>
+              currentUser ? (
               <div>
-                <label>
-                  <strong>Title:</strong>
-                </label>{" "}
-                {current.title}
-              </div>
-              <div>
-                <label>
-                  <strong>Description:</strong>
-                </label>{" "}
-                {current.description}
-              </div>
-              <div>
-                <label>
-                  <strong>Status:</strong>
-                </label>{" "}
-                {current.published ? "Published" : "Pending"}
-              </div>
+                <h4>News</h4>
+                <div>
+                  <label>
+                    <strong>Title:</strong>
+                  </label>{" "}
+                  {current.title}
+                </div>
+                <div>
+                  <label>
+                    <strong>Description:</strong>
+                  </label>{" "}
+                  {current.description}
+                </div>
+                <div>
+                  <label>
+                    <strong>Status:</strong>
+                  </label>{" "}
+                  {current.published ? "Published" : "Pending"}
+                </div>
 
-              <Link
-                to={"/news/" + current.id}
-                className="badge badge-warning"
-              >
-                Edit
-              </Link>
-            </div>
+                <Link
+                    to={"/news/" + current.id}
+                    className="badge badge-warning"
+                >
+                  Edit
+                </Link>
+              </div>
+          ) : (
+                  <div>
+                  </div>
+              )
           ) : (
             <div>
               <br />

@@ -1,6 +1,7 @@
 import { Component, ChangeEvent } from "react";
 import NewsDataService from "../../services/news.service";
 import INewsData from '../../types/news.type';
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -38,6 +39,9 @@ export default class AddNews extends Component<Props, State> {
   }
 
   save() {
+    if (this.state.title==""||this.state.description==""){
+      Swal.fire('title or description cannot be empty')
+    }else {
     const data: INewsData = {
       title: this.state.title,
       description: this.state.description
@@ -57,7 +61,7 @@ export default class AddNews extends Component<Props, State> {
       .catch((e: Error) => {
         console.log(e);
       });
-  }
+  }}
 
   news() {
     this.setState({

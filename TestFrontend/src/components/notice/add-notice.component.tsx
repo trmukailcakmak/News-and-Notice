@@ -1,6 +1,7 @@
 import { Component, ChangeEvent } from "react";
 import NoticeDataService from "../../services/notice.service";
 import INoticeData from '../../types/notice.type';
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -38,6 +39,9 @@ export default class AddNotice extends Component<Props, State> {
   }
 
   save() {
+    if (this.state.title==""||this.state.description==""){
+      Swal.fire('title or description cannot be empty')
+    }else {
     const data: INoticeData = {
       title: this.state.title,
       description: this.state.description
@@ -57,7 +61,7 @@ export default class AddNotice extends Component<Props, State> {
       .catch((e: Error) => {
         console.log(e);
       });
-  }
+  }}
 
   news() {
     this.setState({

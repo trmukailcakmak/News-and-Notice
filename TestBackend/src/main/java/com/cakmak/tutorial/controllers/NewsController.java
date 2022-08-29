@@ -53,6 +53,18 @@ public class NewsController {
         }
     }
 
+    @GetMapping("/news/search/{search}")
+    public ResponseEntity<List<NewsEntity>> getNewsBySearch(@PathVariable("search") String search) {
+
+        List<NewsEntity> newsEntityList = newsRepository.findByTitleLike("%"+search+"%");
+
+        if (!newsEntityList.isEmpty()) {
+            return new ResponseEntity<>(newsEntityList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/news")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<NewsEntity> createNews(@RequestBody NewsEntity news) {

@@ -9,4 +9,6 @@ public interface NewsRepository extends JpaRepository<NewsEntity, Long> {
   List<NewsEntity> findByPublished(boolean published);
 
   List<NewsEntity> findByTitleContaining(String title);
+
+  List<NewsEntity> findByTitleLike(String title);
 }
