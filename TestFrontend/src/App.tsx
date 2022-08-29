@@ -4,18 +4,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
-import IUser from './types/user.type';
+import IUser from "./types/user.type";
 
 import Login from "./components/LoginComponent";
 import Register from "./components/RegisterComponent";
-import News from "./components/NewsComponent";
 import Profile from "./components/ProfileComponent";
-import Notice from "./components/NoticeComponent";
-import NoticeAdd from "./components/BoardAdmin/BoardAdminNoticeAddComponent";
-import BoardTest from "./components/BoardTestComponent";
-import NewsAdd from "./components/BoardAdmin/BoardAdminNewsAddComponent";
 
 import EventBus from "./common/EventBus";
+
+import AddTutorial from "./components/tutorials/add-tutorial.component";
+import Tutorial from "./components/tutorials/tutorial.component";
+import TutorialsList from "./components/tutorials/tutorials-list.component";
+import AddNews from "./components/news/add-news.component";
+import NewsList from "./components/news/news-list.component";
+import NewsComponent from "./components/news/news.component";
+import AddNotice from "./components/notice/add-notice.component";
+import NoticeComponent from "./components/notice/notice.component";
+import NoticeList from "./components/notice/notice-list.component";
 
 type Props = {};
 
@@ -74,44 +79,55 @@ class App extends Component<Props, State> {
             Cakmak
           </Link>
           <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/news"} className="nav-link">
-                News
-              </Link>
-            </li>
-
-            {showTestBoard && (
+            <div className="navbar-nav mr-auto">
               <li className="nav-item">
-                <Link to={"/test"} className="nav-link">
-                  Test Board
+                <Link to={"/newsList"} className="nav-link">
+                  Haberler
                 </Link>
               </li>
-            )}
-
-            {showAdminBoard && (
+            </div>
+            {currentUser ? (
+                    <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                        <Link to={"/addNews"} className="nav-link">
+                          HaberEkle
+                        </Link>
+                      </li>
+                    </div>):
+                (<div></div>)}
+            <div className="navbar-nav mr-auto">
               <li className="nav-item">
-                <Link to={"/newsAdd"} className="nav-link">
-                  News Add
+                <Link to={"/noticeList"} className="nav-link">
+                  Duyurular
                 </Link>
               </li>
-            )}
+            </div>
+            {currentUser ? (
+                    <div className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                        <Link to={"/addNotice"} className="nav-link">
+                          DuyuruEkle
+                        </Link>
+                      </li>
+                    </div>):
+                (<div></div>)}
 
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/notice"} className="nav-link">
-                  Notice
-                </Link>
-              </li>
-            )}
-
-            {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/noticeAdd"} className="nav-link">
-                    Notice Add
-                  </Link>
-                </li>
-            )}
           </div>
+
+          {currentUser ? (
+                  <div className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                      <Link to={"/tutorials"} className="nav-link">
+                        Dersler
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={"/add"} className="nav-link">
+                        DersEkle
+                      </Link>
+                    </li>
+                  </div>):
+              (<div></div>)}
 
           {currentUser ? (
             <div className="navbar-nav ml-auto">
@@ -145,14 +161,22 @@ class App extends Component<Props, State> {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/news"]} component={News} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
-            <Route path="/notice" component={Notice} />
-            <Route path="/test" component={BoardTest} />
-            <Route path="/newsAdd" component={NewsAdd} />
-            <Route path="/noticeAdd" component={NoticeAdd} />
+
+            <Route exact path={["/tutorials"]} component={TutorialsList} />
+            <Route exact path="/add" component={AddTutorial} />
+            <Route path="/tutorials/:id" component={Tutorial} />
+
+            <Route exact path={["/", "/newsList"]} component={NewsList} />
+            <Route exact path="/addNews" component={AddNews} />
+            <Route path="/news/:id" component={NewsComponent} />
+
+            <Route exact path={["/noticeList"]} component={NoticeList} />
+            <Route exact path="/addNotice" component={AddNotice} />
+            <Route path="/notices/:id" component={NoticeComponent} />
+
           </Switch>
         </div>
 
