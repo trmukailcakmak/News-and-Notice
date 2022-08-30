@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import NewsDataService from "../../services/news.service";
 import INewsData from "../../types/news.type";
+import "../../App.css"
 
 interface RouterProps { // type for `match.params`
   id: string; // must be type `string` since value comes from the URL
@@ -132,10 +133,10 @@ export default class NewsComponent extends Component<Props, State> {
     const { current } = this.state;
 
     return (
-      <div>
+      <div id="card-container-1" className="card card-container">
         {current ? (
           <div className="edit-form">
-            <h4>News</h4>
+            <h4>News Edit</h4>
             <form>
               <div className="form-group">
                 <label htmlFor="title">Title</label>

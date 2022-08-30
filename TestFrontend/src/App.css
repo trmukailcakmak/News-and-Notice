@@ -34,7 +34,13 @@ label {
 div[id="all"]{
   margin-left: 10px;
 }
-
-div[id="all"]{
-  margin-left: 10px;
+div[id="loginAndRegister"]{
+  margin-left: 250px;
 }
+div[id="card-container"]{
+  margin-left: 500px;
+}
+div[id="card-container-1"]{
+  margin-left: 600px;
+}
+

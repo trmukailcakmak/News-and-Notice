@@ -2,6 +2,7 @@ import { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import "../App.css"
 
 import AuthService from "../services/auth.service";
 
@@ -77,7 +78,7 @@ export default class Login extends Component<Props, State> {
     };
 
     return (
-      <div className="col-md-12">
+      <div id="loginAndRegister" className="col-md-12">
         <div className="card card-container">
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -109,7 +110,7 @@ export default class Login extends Component<Props, State> {
                   component="div"
                   className="alert alert-danger"
                 />
-              </div>
+              </div><br/>
 
               <div className="form-group">
                 <button type="submit" className="btn btn-primary btn-block" disabled={loading}>

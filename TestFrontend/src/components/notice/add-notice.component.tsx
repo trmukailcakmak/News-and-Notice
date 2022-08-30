@@ -2,6 +2,7 @@ import { Component, ChangeEvent } from "react";
 import NoticeDataService from "../../services/notice.service";
 import INoticeData from '../../types/notice.type';
 import Swal from "sweetalert2";
+import "../../App.css"
 
 type Props = {};
 
@@ -15,7 +16,7 @@ export default class AddNotice extends Component<Props, State> {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.save = this.save.bind(this);
-    this.news = this.news.bind(this);
+    this.notice = this.notice.bind(this);
 
     this.state = {
       id: null,
@@ -39,9 +40,23 @@ export default class AddNotice extends Component<Props, State> {
   }
 
   save() {
-    if (this.state.title==""||this.state.description==""){
-      Swal.fire('title or description cannot be empty')
-    }else {
+    if (this.state.title==""&&this.state.description==""){
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'the title and description cannot be empty!'
+    })
+    }else if(this.state.title==""){
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'the title cannot be empty!'
+    })}else if (this.state.description==""){
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'the descriptin cannot be empty!'
+    })}else {
     const data: INoticeData = {
       title: this.state.title,
       description: this.state.description
@@ -56,14 +71,22 @@ export default class AddNotice extends Component<Props, State> {
           published: response.data.published,
           submitted: true
         });
+        if (this.state.submitted==true){
+          Swal.fire({
+            icon: 'success',
+            title: 'News Added',
+            text: 'press ok to add again'
+          })
+        }
         console.log(response.data);
+        this.notice();
       })
       .catch((e: Error) => {
         console.log(e);
       });
   }}
 
-  news() {
+  notice() {
     this.setState({
       id: null,
       title: "",
@@ -77,16 +100,9 @@ export default class AddNotice extends Component<Props, State> {
     const { submitted, title, description } = this.state;
 
     return (
-      <div className="submit-form">
-        {submitted ? (
-          <div>
-            <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={this.news}>
-              Add
-            </button>
-          </div>
-        ) : (
-          <div>
+      <div id="card-container" className="submit-form">
+          <div className="card card-container">
+            <strong><h3 className="ml-auto">Notice Add</h3></strong>
             <div className="form-group">
               <label htmlFor="title">Title</label>
               <input
@@ -111,13 +127,12 @@ export default class AddNotice extends Component<Props, State> {
                 onChange={this.onChangeDescription}
                 name="description"
               />
-            </div>
+            </div><br/><br/>
 
             <button onClick={this.save} className="btn btn-success">
               Submit
             </button>
           </div>
-        )}
       </div>
     );
   }

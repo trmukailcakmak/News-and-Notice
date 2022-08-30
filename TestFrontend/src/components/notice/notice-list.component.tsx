@@ -175,7 +175,6 @@ export default class NoticeList extends Component<Props, State>{
         </div>
         <div className="col-md-6">
           {current ? (
-              currentUser ? (
             <div>
               <h4>Notice</h4>
               <div>
@@ -203,11 +202,15 @@ export default class NoticeList extends Component<Props, State>{
               >
                 Edit
               </Link>
-            </div>
-              ):(<div/>)) : (
+            </div>) : (
             <div>
-              <br />
-              <p>Please click on a Notice...</p>
+              {notice ?(
+              <div>
+                <br />
+                <p>Please click on a Notice...</p>
+              </div>
+              ):(<div/>)}
+
             </div>
           )}
         </div>

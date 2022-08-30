@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Redirect } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import IUser from "../types/user.type";
+import "../App.css"
 
 type Props = {};
 
@@ -36,19 +37,19 @@ export default class Profile extends Component<Props, State> {
     const { currentUser } = this.state;
 
     return (
-      <div className="container">
+      <div id="card-container">
         {(this.state.userReady) ?
-          <div>
-            <header className="jumbotron">
+          <div className="card card-container">
+            <header>
+              <img
+                  src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                  alt="profile-img"
+                  className="profile-img-card"
+              />
               <h3>
                 <strong>{currentUser.username}</strong> Profile
               </h3>
             </header>
-            <p>
-              <strong>Token:</strong>{" "}
-              {currentUser.accessToken.substring(0, 20)} ...{" "}
-              {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-            </p>
             <p>
               <strong>Id:</strong>{" "}
               {currentUser.id}
@@ -59,8 +60,7 @@ export default class Profile extends Component<Props, State> {
             </p>
             <strong>Authorities:</strong>
             <ul>
-              {currentUser.roles &&
-                currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
+              {currentUser.roles && currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
             </ul>
           </div> : null}
       </div>

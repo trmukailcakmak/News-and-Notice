@@ -22,7 +22,6 @@ import NoticeList from "./components/notice/notice-list.component";
 type Props = {};
 
 type State = {
-  showTestBoard: boolean,
   showAdminBoard: boolean,
   currentUser: IUser | undefined
 }
@@ -33,7 +32,6 @@ class App extends Component<Props, State> {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      showTestBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
     };
@@ -45,7 +43,6 @@ class App extends Component<Props, State> {
     if (user) {
       this.setState({
         currentUser: user,
-        showTestBoard: user.roles.includes("ROLE_TEST"),
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
@@ -60,18 +57,17 @@ class App extends Component<Props, State> {
   logOut() {
     AuthService.logout();
     this.setState({
-      showTestBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
     });
   }
 
   render() {
-    const { currentUser, showTestBoard, showAdminBoard } = this.state;
+    const { currentUser} = this.state;
 
     return (
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav className="navbar navbar-expand navbar-dark bg-primary">
           <Link to={"/"} className="navbar-brand">
             Cakmak
           </Link>

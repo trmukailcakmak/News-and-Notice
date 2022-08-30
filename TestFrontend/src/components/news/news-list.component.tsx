@@ -179,7 +179,6 @@ export default class NewsList extends Component<Props, State>{
         </div>
         <div className="col-md-6">
           {current ? (
-              currentUser ? (
               <div>
                 <h4>News</h4>
                 <div>
@@ -209,13 +208,13 @@ export default class NewsList extends Component<Props, State>{
                 </Link>
               </div>
           ) : (
-                  <div>
-                  </div>
-              )
-          ) : (
             <div>
-              <br />
-              <p>Please click on a News...</p>
+              {news ? (
+              <div>
+                <br/>
+                <p>Please click on a News...</p>
+              </div>):(<div/>)}
+
             </div>
           )}
         </div>
