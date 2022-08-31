@@ -45,23 +45,19 @@ export default class Profile extends Component<Props, State> {
                   src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                   alt="profile-img"
                   className="profile-img-card"
-              />
+              /><br/>
               <h3>
-                <strong>{currentUser.username}</strong> Profile
-              </h3>
+                <strong>{currentUser.username?.toUpperCase()}</strong> Profili
+              </h3><br/>
             </header>
             <p>
-              <strong>Id:</strong>{" "}
-              {currentUser.id}
-            </p>
+              <strong>Adı:</strong>{" "}
+              {currentUser.username}
+            </p><br/>
             <p>
               <strong>Email:</strong>{" "}
               {currentUser.email}
-            </p>
-            <strong>Authorities:</strong>
-            <ul>
-              {currentUser.roles && currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
-            </ul>
+            </p><br/>
           </div> : null}
       </div>
     );

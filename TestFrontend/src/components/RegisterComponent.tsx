@@ -34,26 +34,26 @@ export default class Register extends Component<Props, State> {
       username: Yup.string()
         .test(
           "len",
-          "The username must be between 3 and 20 characters.",
+          "Kulanıcı adı 3 ve 20 karekter arasında olmalı.",
           (val: any) =>
             val &&
             val.toString().length >= 3 &&
             val.toString().length <= 20
         )
-        .required("This field is required!"),
+        .required("Bu alan zorunlu!"),
       email: Yup.string()
-        .email("This is not a valid email.")
-        .required("This field is required!"),
+        .email("Geçersiz email.")
+        .required("Bu alan zorunlu!"),
       password: Yup.string()
         .test(
           "len",
-          "The password must be between 6 and 40 characters.",
+          "Şifre 6 ve 40 karakter arasında olmalı.",
           (val: any) =>
             val &&
             val.toString().length >= 6 &&
             val.toString().length <= 40
         )
-        .required("This field is required!"),
+        .required("Bu alan zorunlu!"),
     });
   }
 
@@ -119,7 +119,7 @@ export default class Register extends Component<Props, State> {
               {!successful && (
                 <div>
                   <div className="form-group">
-                    <label htmlFor="username"> Username </label>
+                    <label htmlFor="username"> Kulanıcı Adı </label>
                     <Field name="username" type="text" className="form-control" />
                     <ErrorMessage
                       name="username"
@@ -139,7 +139,7 @@ export default class Register extends Component<Props, State> {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="password"> Password </label>
+                    <label htmlFor="password"> Şifre </label>
                     <Field
                       name="password"
                       type="password"
@@ -153,7 +153,7 @@ export default class Register extends Component<Props, State> {
                   </div><br/>
 
                   <div className="form-group">
-                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                    <button type="submit" className="btn btn-primary btn-block">Kayıt ol</button>
                   </div>
                 </div>
               )}

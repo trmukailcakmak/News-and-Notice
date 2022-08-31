@@ -83,7 +83,7 @@ class App extends Component<Props, State> {
                     <div className="navbar-nav mr-auto">
                       <li className="nav-item">
                         <Link to={"/addNews"} className="nav-link">
-                          HaberEkle
+                          Haber Ekle
                         </Link>
                       </li>
                     </div>):
@@ -99,7 +99,7 @@ class App extends Component<Props, State> {
                     <div className="navbar-nav mr-auto">
                       <li className="nav-item">
                         <Link to={"/addNotice"} className="nav-link">
-                          DuyuruEkle
+                          Duyuru Ekle
                         </Link>
                       </li>
                     </div>):
@@ -116,7 +116,7 @@ class App extends Component<Props, State> {
               </li>
               <li className="nav-item">
                 <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
+                  Çıkış
                 </a>
               </li>
             </div>
@@ -124,13 +124,13 @@ class App extends Component<Props, State> {
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
-                  Login
+                  Giriş
                 </Link>
               </li>
 
               <li className="nav-item">
                 <Link to={"/register"} className="nav-link">
-                  Sign Up
+                  Kayıt ol
                 </Link>
               </li>
             </div>

@@ -44,18 +44,18 @@ export default class AddNotice extends Component<Props, State> {
       Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: 'the title and description cannot be empty!'
+      text: 'Başlık ve açıklama alanı boş olamaz!'
     })
     }else if(this.state.title==""){
       Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: 'the title cannot be empty!'
+      text: 'Başlık alanı boş olamaz!'
     })}else if (this.state.description==""){
       Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: 'the descriptin cannot be empty!'
+      text: 'Açıklama alanı boş olamaz!'
     })}else {
     const data: INoticeData = {
       title: this.state.title,
@@ -74,8 +74,8 @@ export default class AddNotice extends Component<Props, State> {
         if (this.state.submitted==true){
           Swal.fire({
             icon: 'success',
-            title: 'Notice Added',
-            text: 'press ok to add again'
+            title: 'Duyuru Eklendi',
+            text: 'Tekrar eklemek için ok basın'
           })
         }
         console.log(response.data);
@@ -102,9 +102,9 @@ export default class AddNotice extends Component<Props, State> {
     return (
       <div id="card-container" className="submit-form">
           <div className="card card-container">
-            <strong><h3 className="ml-auto">Notice Add</h3></strong>
+            <strong><h3 className="ml-auto">Duyuru Ekle</h3></strong>
             <div className="form-group">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">Başlık</label>
               <input
                 type="text"
                 className="form-control"
@@ -117,7 +117,7 @@ export default class AddNotice extends Component<Props, State> {
             </div>
 
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">Açıklama</label>
               <input
                 type="text"
                 className="form-control"
@@ -130,7 +130,7 @@ export default class AddNotice extends Component<Props, State> {
             </div><br/><br/>
 
             <button onClick={this.save} className="btn btn-success">
-              Submit
+              Ekle
             </button>
           </div>
       </div>

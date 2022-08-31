@@ -34,8 +34,8 @@ export default class Login extends Component<Props, State> {
 
   validationSchema() {
     return Yup.object().shape({
-      username: Yup.string().required("This field is required!"),
-      password: Yup.string().required("This field is required!"),
+      username: Yup.string().required("Bu alan zorunludur!"),
+      password: Yup.string().required("Bu alan zorunludur"),
     });
   }
 
@@ -93,7 +93,7 @@ export default class Login extends Component<Props, State> {
           >
             <Form>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Kulanıcı Adı</label>
                 <Field name="username" type="text" className="form-control" />
                 <ErrorMessage
                   name="username"
@@ -103,7 +103,7 @@ export default class Login extends Component<Props, State> {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Şifre</label>
                 <Field name="password" type="password" className="form-control" />
                 <ErrorMessage
                   name="password"
@@ -117,7 +117,7 @@ export default class Login extends Component<Props, State> {
                   {loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}
-                  <span>Login</span>
+                  <span>Giriş</span>
                 </button>
               </div>
 

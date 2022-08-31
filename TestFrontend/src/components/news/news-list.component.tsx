@@ -148,7 +148,7 @@ export default class NewsList extends Component<Props, State>{
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search by title"
+                  placeholder="Haber Arama"
                   value={searchTitle}
                   onChange={this.onChangeSearchTitle}
                 />
@@ -158,13 +158,13 @@ export default class NewsList extends Component<Props, State>{
                     type="button"
                     onClick={this.searchTitle}
                   >
-                    Search
+                    Ara
                   </button>
                 </div>
               </div>
             </div>
             <div className="col-md-6">
-              <h4>News List</h4>
+              <h4>Haber Listesi</h4>
 
               <ul className="list-group">
                 {news &&
@@ -186,7 +186,7 @@ export default class NewsList extends Component<Props, State>{
                   className="m-3 btn btn-sm btn-danger"
                   onClick={this.removeAll}
               >
-                Remove All
+                Hepsini sil
               </button>):(<div/>)):(<div/>)}
 
 
@@ -194,31 +194,31 @@ export default class NewsList extends Component<Props, State>{
             <div className="col-md-6">
               {current ? (
                   <div>
-                    <h4>News</h4>
+                    <h4>Haber</h4>
                     <div>
                       <label>
-                        <strong>Title:</strong>
+                        <strong>Başlık:</strong>
                       </label>{" "}
                       {current.title}
                     </div>
                     <div>
                       <label>
-                        <strong>Description:</strong>
+                        <strong>Açıklama:</strong>
                       </label>{" "}
                       {current.description}
                     </div>
                     <div>
                       <label>
-                        <strong>Status:</strong>
+                        <strong>Durumu:</strong>
                       </label>{" "}
-                      {current.published ? "Published" : "Pending"}
+                      {current.published ? "Yayında" : "Yayında Değil"}
                     </div>
 
                     <Link
                         to={"/news/" + current.id}
                         className="badge badge-warning"
                     >
-                      Edit
+                      Düzenle
                     </Link>
                   </div>
               ) : (
@@ -226,7 +226,7 @@ export default class NewsList extends Component<Props, State>{
                   {news ? (
                   <div>
                     <br/>
-                    <p>Please click on a News...</p>
+                    <p>Lütfen habere tıklayın...</p>
                   </div>):(<div/>)}
 
                 </div>

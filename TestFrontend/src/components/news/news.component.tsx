@@ -93,7 +93,7 @@ export default class NewsComponent extends Component<Props, State> {
             ...prevState.current,
             published: status,
           },
-          message: "The status was updated successfully!"
+          message: "Durum başarıyla güncelendi!"
         }));
         console.log(response.data);
       })
@@ -110,7 +110,7 @@ export default class NewsComponent extends Component<Props, State> {
       .then((response: any) => {
         console.log(response.data);
         this.setState({
-          message: "The tutorial was updated successfully!",
+          message: "Haber başarıyla güncelendi!",
         });
       })
       .catch((e: Error) => {
@@ -122,7 +122,7 @@ export default class NewsComponent extends Component<Props, State> {
     NewsDataService.delete(this.state.current.id)
       .then((response: any) => {
         console.log(response.data);
-        this.props.history.push("/tutorials");
+        this.props.history.push("/newsList");
       })
       .catch((e: Error) => {
         console.log(e);
@@ -136,10 +136,10 @@ export default class NewsComponent extends Component<Props, State> {
       <div id="card-container-1" className="card card-container">
         {current ? (
           <div className="edit-form">
-            <h4>News Edit</h4>
+            <h4>Haber Düzenleme</h4>
             <form>
               <div className="form-group">
-                <label htmlFor="title">Title</label>
+                <label htmlFor="title">Başlık</label>
                 <input
                   type="text"
                   className="form-control"
@@ -149,7 +149,7 @@ export default class NewsComponent extends Component<Props, State> {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">Açıklama</label>
                 <input
                   type="text"
                   className="form-control"
@@ -161,9 +161,9 @@ export default class NewsComponent extends Component<Props, State> {
 
               <div className="form-group">
                 <label>
-                  <strong>Status:</strong>
+                  <strong>Durumu:</strong>
                 </label>
-                {current.published ? "Published" : "Pending"}
+                {current.published ? "Yayında" : "Yayında değil"}
               </div>
             </form>
 
@@ -172,14 +172,14 @@ export default class NewsComponent extends Component<Props, State> {
                 className="badge badge-primary mr-2"
                 onClick={() => this.updatePublished(false)}
               >
-                UnPublish
+                Yayından Çıkar
               </button>
             ) : (
               <button
                 className="badge badge-primary mr-2"
                 onClick={() => this.updatePublished(true)}
               >
-                Publish
+                Yayınla
               </button>
             )}
 
@@ -187,7 +187,7 @@ export default class NewsComponent extends Component<Props, State> {
               className="badge badge-danger mr-2"
               onClick={this.delete}
             >
-              Delete
+              Sil
             </button>
 
             <button
@@ -195,14 +195,14 @@ export default class NewsComponent extends Component<Props, State> {
               className="badge badge-success"
               onClick={this.update}
             >
-              Update
+              Güncele
             </button>
             <p>{this.state.message}</p>
           </div>
         ) : (
           <div>
             <br />
-            <p>Please click on a News...</p>
+            <p>Lütfen habere tıklayın...</p>
           </div>
         )}
       </div>

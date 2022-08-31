@@ -145,7 +145,7 @@ export default class NoticeList extends Component<Props, State>{
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
+              placeholder="Duyuru Ara"
               value={searchTitle}
               onChange={this.onChangeSearchTitle}
             />
@@ -155,13 +155,13 @@ export default class NoticeList extends Component<Props, State>{
                 type="button"
                 onClick={this.searchTitle}
               >
-                Search
+                Ara
               </button>
             </div>
           </div>
         </div>
         <div className="col-md-6">
-          <h4>Notice List</h4>
+          <h4>Duyuru Listesi</h4>
 
           <ul className="list-group">
             {notice &&
@@ -183,45 +183,45 @@ export default class NoticeList extends Component<Props, State>{
               className="m-3 btn btn-sm btn-danger"
               onClick={this.removeAll}
           >
-            Remove All
+            Hepsini sil
           </button>):(<div/>)):(<div/>)}
 
         </div>
         <div className="col-md-6">
           {current ? (
             <div>
-              <h4>Notice</h4>
+              <h4>Duyuru</h4>
               <div>
                 <label>
-                  <strong>Title:</strong>
+                  <strong>Başlık:</strong>
                 </label>{" "}
                 {current.title}
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Açıklama:</strong>
                 </label>{" "}
                 {current.description}
               </div>
               <div>
                 <label>
-                  <strong>Status:</strong>
+                  <strong>Durumu:</strong>
                 </label>{" "}
-                {current.published ? "Published" : "Pending"}
+                {current.published ? "Yayında" : "Yayında değil"}
               </div>
 
               <Link
                 to={"/notices/" + current.id}
                 className="badge badge-warning"
               >
-                Edit
+                Düzenle
               </Link>
             </div>) : (
             <div>
               {notice ?(
               <div>
                 <br />
-                <p>Please click on a Notice...</p>
+                <p>Lütfen duyuruya tıklayın...</p>
               </div>
               ):(<div/>)}
 
