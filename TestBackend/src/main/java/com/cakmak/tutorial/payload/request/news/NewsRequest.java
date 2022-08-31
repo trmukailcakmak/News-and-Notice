@@ -10,6 +10,8 @@ public class NewsRequest implements Serializable {
     private String detail;
     private Boolean published;
 
+    private String activityType;
+
     public Long getId() {
         return id;
     }
@@ -48,5 +50,13 @@ public class NewsRequest implements Serializable {
 
     public void setPublished(Boolean published) {
         this.published = published;
+    }
+
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
     }
 }

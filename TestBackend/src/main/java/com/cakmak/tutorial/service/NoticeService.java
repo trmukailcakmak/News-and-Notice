@@ -81,6 +81,7 @@ public class NoticeService {
         try {
             NoticeEntity noticeEntity = noticeRepository
                     .save(noticeMapper.requestToEntity(noticeRequest));
+            noticeEntity.setActivityType("NOTICE");
             return new ServiceResult<>(noticeMapper.entityToResponse(noticeEntity));
         } catch (Exception e) {
             return new ServiceResult<>(HttpStatus.INTERNAL_SERVER_ERROR,e);

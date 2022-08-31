@@ -12,6 +12,7 @@ import com.cakmak.tutorial.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -24,6 +25,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class NoticeController {
+
+	@Autowired
+	SimpMessagingTemplate simpMessagingTemplate;
 
 	@Autowired
 	NoticeService noticeService;
@@ -81,7 +85,7 @@ public class NoticeController {
 	public ResponseEntity<NoticeResponse> createNotice(@RequestBody @Valid NoticeRequest request) {
 		try {
 			ServiceResult<NoticeResponse> serviceResult = noticeService.create(request);
-
+			simpMessagingTemplate.convertAndSend("/topic/create",serviceResult.getValue());
 			if (serviceResult.isSuccess()) {
 				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
 			} else {

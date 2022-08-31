@@ -22,6 +22,9 @@ public class ActivityEntity {
     @Column(name = "published")
     private Boolean published;
 
+    @Column(name = "activity_type", insertable = false, updatable = false)
+    private String activityType;
+
     public ActivityEntity() {
 
     }
@@ -70,5 +73,13 @@ public class ActivityEntity {
 
     public void setPublished(Boolean published) {
         this.published = published;
+    }
+
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
     }
 }

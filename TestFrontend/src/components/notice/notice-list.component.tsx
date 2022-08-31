@@ -5,6 +5,7 @@ import INoticeData from '../../types/notice.type';
 import IUser from "../../types/user.type";
 import AuthService from "../../services/auth.service";
 import Swal from "sweetalert2";
+import StompClient from "react-stomp-client";
 
 type Props = {};
 
@@ -25,6 +26,7 @@ export default class NoticeList extends Component<Props, State>{
     this.setActive = this.setActive.bind(this);
     this.removeAll = this.removeAll.bind(this);
     this.searchTitle = this.searchTitle.bind(this);
+    this.handleNoticeCreate = this.handleNoticeCreate.bind(this);
 
     this.state = {
       notice: [],
@@ -33,6 +35,15 @@ export default class NoticeList extends Component<Props, State>{
       searchTitle: "",
       currentUser : undefined
     };
+  }
+
+  handleNoticeCreate(webSocketMessage:any) {
+    const data = JSON.parse(webSocketMessage.body);
+    if(data.activityType==="NOTICE") {
+      this.setState({
+        notice: [...this.state.notice, data]
+      });
+    }
   }
 
   componentDidMount() {
@@ -125,7 +136,12 @@ export default class NoticeList extends Component<Props, State>{
     const { currentUser,searchTitle, notice, current, currentIndex } = this.state;
 
     return (
-      <div className="list row">
+        <StompClient
+            endpoint="ws://localhost:8080/websocket"
+            topic="topic/create"
+            onMessage={this.handleNoticeCreate}
+        >
+          <div className="list row">
         <div className="col-md-8">
           <div className="input-group mb-3">
             <input
@@ -215,6 +231,8 @@ export default class NoticeList extends Component<Props, State>{
           )}
         </div>
       </div>
+        </StompClient>
+
     );
   }
 }

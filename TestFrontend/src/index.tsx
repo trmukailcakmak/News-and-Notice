@@ -5,8 +5,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <BrowserRouter>
+ReactDOM.render(<BrowserRouter>
     <App />
   </BrowserRouter>,
   document.getElementById('root')

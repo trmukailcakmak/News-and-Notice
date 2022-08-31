@@ -9,6 +9,7 @@ import com.cakmak.tutorial.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -21,6 +22,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class NewsController {
+
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     NewsService newsService;
@@ -79,6 +83,8 @@ public class NewsController {
         try {
             ServiceResult<NewsResponse> serviceResult = newsService.createNews(news);
 
+            simpMessagingTemplate.convertAndSend("/topic/create",serviceResult.getValue());
+
             if (serviceResult.isSuccess()) {
                 return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
             } else {
@@ -94,7 +100,6 @@ public class NewsController {
     public ResponseEntity<NewsResponse> updateNews(@PathVariable("id") long id, @RequestBody NewsRequest updateDataNewsRequest) {
         try {
             ServiceResult<NewsResponse> serviceResult = newsService.updateNews(id,updateDataNewsRequest);
-
             if (serviceResult.isSuccess()) {
                 return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
             } else {
