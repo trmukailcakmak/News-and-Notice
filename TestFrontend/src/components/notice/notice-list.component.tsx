@@ -39,11 +39,9 @@ export default class NoticeList extends Component<Props, State>{
 
   handleNoticeCreate(webSocketMessage:any) {
     const data = JSON.parse(webSocketMessage.body);
-    if(data.activityType==="NOTICE") {
       this.setState({
         notice: [...this.state.notice, data]
       });
-    }
   }
 
   componentDidMount() {
@@ -138,7 +136,7 @@ export default class NoticeList extends Component<Props, State>{
     return (
         <StompClient
             endpoint="ws://localhost:8080/websocket"
-            topic="topic/create"
+            topic="topic/notice.create"
             onMessage={this.handleNoticeCreate}
         >
           <div className="list row">

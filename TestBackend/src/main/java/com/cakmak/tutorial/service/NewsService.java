@@ -82,7 +82,6 @@ public class NewsService {
         try {
             NewsEntity newsEntity = newsRepository
                     .save(newsMapper.requestToEntity(newsRequest));
-            newsEntity.setActivityType("NEWS");
             return new ServiceResult<>(newsMapper.entityToResponse(newsEntity));
         } catch (Exception e) {
             return new ServiceResult<>(HttpStatus.INTERNAL_SERVER_ERROR,e);

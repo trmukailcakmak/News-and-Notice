@@ -83,7 +83,7 @@ public class NewsController {
         try {
             ServiceResult<NewsResponse> serviceResult = newsService.createNews(news);
 
-            simpMessagingTemplate.convertAndSend("/topic/create",serviceResult.getValue());
+            simpMessagingTemplate.convertAndSend("/topic/news.create",serviceResult.getValue());
 
             if (serviceResult.isSuccess()) {
                 return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());

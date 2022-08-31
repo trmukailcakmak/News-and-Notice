@@ -40,9 +40,7 @@ export default class NewsList extends Component<Props, State>{
 
   handleNewsCreate(webSocketMessage:any) {
     const data = JSON.parse(webSocketMessage.body);
-    if(data.activityType==="NEWS"){
-      this.setState({ news:[...this.state.news,data]});
-    }
+    this.setState({ news:[...this.state.news,data]});
   }
 
 
@@ -140,7 +138,7 @@ export default class NewsList extends Component<Props, State>{
     return(
         <StompClient
             endpoint="ws://localhost:8080/websocket"
-            topic="topic/create"
+            topic="topic/news.create"
             onMessage={this.handleNewsCreate}
         >
           <div className="list row">

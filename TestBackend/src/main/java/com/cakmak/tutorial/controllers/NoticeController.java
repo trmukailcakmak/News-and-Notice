@@ -85,7 +85,7 @@ public class NoticeController {
 	public ResponseEntity<NoticeResponse> createNotice(@RequestBody @Valid NoticeRequest request) {
 		try {
 			ServiceResult<NoticeResponse> serviceResult = noticeService.create(request);
-			simpMessagingTemplate.convertAndSend("/topic/create",serviceResult.getValue());
+			simpMessagingTemplate.convertAndSend("/topic/notice.create",serviceResult.getValue());
 			if (serviceResult.isSuccess()) {
 				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
 			} else {
