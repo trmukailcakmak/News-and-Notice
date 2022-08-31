@@ -1,13 +1,20 @@
 package com.cakmak.tutorial.controllers;
 
-import com.cakmak.tutorial.models.entity.NoticeEntity;
-import com.cakmak.tutorial.repository.NoticeRepository;
+import com.cakmak.tutorial.models.core.ServiceResult;
+import com.cakmak.tutorial.models.entity.NewsEntity;
+import com.cakmak.tutorial.payload.request.news.NewsRequest;
+import com.cakmak.tutorial.payload.request.notice.NoticeRequest;
+import com.cakmak.tutorial.payload.response.news.NewsResponse;
+import com.cakmak.tutorial.payload.response.notice.NoticeResponse;
+import com.cakmak.tutorial.repository.NewsRepository;
+import com.cakmak.tutorial.service.NewsService;
+import com.cakmak.tutorial.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,23 +26,20 @@ import java.util.Optional;
 public class NoticeController {
 
 	@Autowired
-	NoticeRepository noticeRepository;
+	NoticeService noticeService;
 
 	@GetMapping("/notices")
-	public ResponseEntity<List<NoticeEntity>> getAllNotice(@RequestParam(required = false) String title) {
+	public ResponseEntity<List<NoticeResponse>> getAllNews(@RequestParam(required = false) String title) {
 		try {
-			List<NoticeEntity> noticeList = new ArrayList<>();
 
-			if (title == null)
-				noticeRepository.findAll().forEach(noticeList::add);
-			else
-				noticeRepository.findByTitleContaining(title).forEach(noticeList::add);
+			ServiceResult<List<NoticeResponse>> serviceResult = noticeService.getAll(title);
 
-			if (noticeList.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			if(serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), HttpStatus.OK);
 			}
-
-			return new ResponseEntity<>(noticeList, HttpStatus.OK);
+			else{
+				return new ResponseEntity<>(null,serviceResult.getStatus());
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -43,23 +47,46 @@ public class NoticeController {
 
 	@GetMapping("/notices/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<NoticeEntity> getNoticeById(@PathVariable("id") long id) {
-		Optional<NoticeEntity> noticeData = noticeRepository.findById(id);
+	public ResponseEntity<NoticeResponse> getNewsById(@PathVariable("id") long id) {
+		try{
+			ServiceResult<NoticeResponse> serviceResult = noticeService.getNewsById(id);
 
-		if (noticeData.isPresent()) {
-			return new ResponseEntity<>(noticeData.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/notices/search/{title}")
+	public ResponseEntity<List<NoticeResponse>> searchByTitle(@PathVariable("title") String title) {
+		try{
+			ServiceResult<List<NoticeResponse>> serviceResult = noticeService.searchByTitle(title);
+
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping("/notices")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<NoticeEntity> createNotice(@RequestBody NoticeEntity notice) {
+	public ResponseEntity<NoticeResponse> createNotice(@RequestBody @Valid NoticeRequest request) {
 		try {
-			 notice = noticeRepository
-					.save(new NoticeEntity(notice.getTitle(), notice.getDescription(), false));
-			return new ResponseEntity<>(notice, HttpStatus.CREATED);
+			ServiceResult<NoticeResponse> serviceResult = noticeService.create(request);
+
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -67,17 +94,17 @@ public class NoticeController {
 
 	@PutMapping("/notices/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<NoticeEntity> updateNotice(@PathVariable("id") long id, @RequestBody NoticeEntity newNoticeData) {
-		Optional<NoticeEntity> oldNoticeData = noticeRepository.findById(id);
+	public ResponseEntity<NoticeResponse> updateNotice(@PathVariable("id") long id, @RequestBody NoticeRequest request) {
+		try {
+			ServiceResult<NoticeResponse> serviceResult = noticeService.update(id,request);
 
-		if (oldNoticeData.isPresent()) {
-			NoticeEntity notice = oldNoticeData.get();
-			notice.setTitle(newNoticeData.getTitle());
-			notice.setDescription(newNoticeData.getDescription());
-			notice.setPublished(newNoticeData.getPublished());
-			return new ResponseEntity<>(noticeRepository.save(notice), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -85,10 +112,15 @@ public class NoticeController {
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteNotice(@PathVariable("id") long id) {
 		try {
-			noticeRepository.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			ServiceResult<HttpStatus> serviceResult = noticeService.delete(id);
+
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -96,26 +128,31 @@ public class NoticeController {
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAllNotice() {
 		try {
-			noticeRepository.deleteAll();
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			ServiceResult<HttpStatus> serviceResult = noticeService.deleteAll();
 
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@GetMapping("/notices/published")
 	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-	public ResponseEntity<List<NoticeEntity>> findByPublished() {
+	public ResponseEntity<List<NoticeResponse>> findByPublished() {
 		try {
-			List<NoticeEntity> noticeList = noticeRepository.findByPublished(true);
+			ServiceResult<List<NoticeResponse>> serviceResult = noticeService.findByPublished();
 
-			if (noticeList.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			if (serviceResult.isSuccess()) {
+				return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<>(noticeList, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
