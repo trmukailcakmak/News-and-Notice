@@ -28,7 +28,7 @@ class NoticeDataService {
   }
 
   findByTitle(title: string) {
-    return http.get<Array<INoticeData>>(`/notices?title=${title}`);
+    return http.get<Array<INoticeData>>(`/api/notices?title=${title}`);
   }
 }
 

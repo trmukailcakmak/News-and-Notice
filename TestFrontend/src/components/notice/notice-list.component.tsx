@@ -165,12 +165,12 @@ export default class NoticeList extends Component<Props, State>{
               ))}
           </ul>
 
-          {currentUser ? (<button
+          {currentUser ? (notice ? (<button
               className="m-3 btn btn-sm btn-danger"
               onClick={this.removeAll}
           >
             Remove All
-          </button>):(<div/>)}
+          </button>):(<div/>)):(<div/>)}
 
         </div>
         <div className="col-md-6">

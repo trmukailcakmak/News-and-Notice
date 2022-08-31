@@ -1,10 +1,12 @@
-package com.cakmak.tutorial.models;
+package com.cakmak.tutorial.models.entity;
+
+import com.cakmak.tutorial.models.enm.ERole;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class RoleEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -13,11 +15,11 @@ public class Role {
   @Column(length = 20)
   private ERole name;
 
-  public Role() {
+  public RoleEntity() {
 
   }
 
-  public Role(ERole name) {
+  public RoleEntity(ERole name) {
     this.name = name;
   }
 

@@ -74,7 +74,7 @@ export default class AddNotice extends Component<Props, State> {
         if (this.state.submitted==true){
           Swal.fire({
             icon: 'success',
-            title: 'News Added',
+            title: 'Notice Added',
             text: 'press ok to add again'
           })
         }

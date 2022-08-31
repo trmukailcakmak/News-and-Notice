@@ -1,13 +1,17 @@
 package com.cakmak.tutorial.controllers;
 
-import com.cakmak.tutorial.models.NewsEntity;
+import com.cakmak.tutorial.models.core.ServiceResult;
+import com.cakmak.tutorial.models.entity.NewsEntity;
+import com.cakmak.tutorial.payload.request.news.NewsRequest;
+import com.cakmak.tutorial.payload.response.news.NewsResponse;
 import com.cakmak.tutorial.repository.NewsRepository;
+import com.cakmak.tutorial.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,23 +23,20 @@ import java.util.Optional;
 public class NewsController {
 
     @Autowired
-    NewsRepository newsRepository;
+    NewsService newsService;
 
     @GetMapping("/news")
-    public ResponseEntity<List<NewsEntity>> getAllNews(@RequestParam(required = false) String title) {
+    public ResponseEntity<List<NewsResponse>> getAllNews(@RequestParam(required = false) String title) {
         try {
-            List<NewsEntity> news = new ArrayList<>();
 
-            if (title == null)
-                newsRepository.findAll().forEach(news::add);
-            else
-                newsRepository.findByTitleContaining(title).forEach(news::add);
+            ServiceResult<List<NewsResponse>> serviceResult = newsService.getAllNews(title);
 
-            if (news.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if(serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), HttpStatus.OK);
             }
-
-            return new ResponseEntity<>(news, HttpStatus.OK);
+            else{
+                return new ResponseEntity<>(null,serviceResult.getStatus());
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -43,35 +44,46 @@ public class NewsController {
 
     @GetMapping("/news/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<NewsEntity> getNewsById(@PathVariable("id") long id) {
-        Optional<NewsEntity> newsData = newsRepository.findById(id);
+    public ResponseEntity<NewsResponse> getNewsById(@PathVariable("id") long id) {
+        try{
+            ServiceResult<NewsResponse> serviceResult = newsService.getNewsById(id);
 
-        if (newsData.isPresent()) {
-            return new ResponseEntity<>(newsData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/news/search/{search}")
-    public ResponseEntity<List<NewsEntity>> getNewsBySearch(@PathVariable("search") String search) {
+    public ResponseEntity<List<NewsResponse>> getNewsBySearch(@PathVariable("search") String search) {
+        try{
+            ServiceResult<List<NewsResponse>> serviceResult = newsService.getNewsBySearch(search);
 
-        List<NewsEntity> newsEntityList = newsRepository.findByTitleLike("%"+search+"%");
-
-        if (!newsEntityList.isEmpty()) {
-            return new ResponseEntity<>(newsEntityList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/news")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<NewsEntity> createNews(@RequestBody NewsEntity news) {
+    public ResponseEntity<NewsResponse> createNews(@RequestBody @Valid NewsRequest news) {
         try {
-             news = newsRepository
-                    .save(new NewsEntity(news.getTitle(), news.getDescription(), false));
-            return new ResponseEntity<>(news, HttpStatus.CREATED);
+            ServiceResult<NewsResponse> serviceResult = newsService.createNews(news);
+
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -79,17 +91,17 @@ public class NewsController {
 
     @PutMapping("/news/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<NewsEntity> updateNews(@PathVariable("id") long id, @RequestBody NewsEntity willNewsData) {
-        Optional<NewsEntity> oldNewsData = newsRepository.findById(id);
+    public ResponseEntity<NewsResponse> updateNews(@PathVariable("id") long id, @RequestBody NewsRequest updateDataNewsRequest) {
+        try {
+            ServiceResult<NewsResponse> serviceResult = newsService.updateNews(id,updateDataNewsRequest);
 
-        if (oldNewsData.isPresent()) {
-            NewsEntity news = oldNewsData.get();
-            news.setTitle(willNewsData.getTitle());
-            news.setDescription(willNewsData.getDescription());
-            news.setPublished(willNewsData.isPublished());
-            return new ResponseEntity<>(newsRepository.save(news), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -97,10 +109,15 @@ public class NewsController {
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteNews(@PathVariable("id") long id) {
         try {
-            newsRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            ServiceResult<HttpStatus> serviceResult = newsService.deleteNews(id);
+
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -108,26 +125,31 @@ public class NewsController {
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteAllNews() {
         try {
-            newsRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            ServiceResult<HttpStatus> serviceResult = newsService.deleteAllNews();
 
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/news/published")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<List<NewsEntity>> findByPublished() {
+    public ResponseEntity<List<NewsResponse>> findByPublished() {
         try {
-            List<NewsEntity> news = newsRepository.findByPublished(true);
+            ServiceResult<List<NewsResponse>> serviceResult = newsService.findByPublished();
 
-            if (news.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (serviceResult.isSuccess()) {
+                return new ResponseEntity<>(serviceResult.getValue(), serviceResult.getStatus());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(news, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

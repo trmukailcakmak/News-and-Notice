@@ -1,9 +1,8 @@
-package com.cakmak.tutorial.payload.request.news;
+package com.cakmak.tutorial.payload.response.notice;
 
 import java.io.Serializable;
 
-public class NewsRequest implements Serializable {
-
+public class NoticeResponse implements Serializable {
     private Long id;
     private String title;
     private String description;

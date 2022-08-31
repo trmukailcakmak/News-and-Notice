@@ -1,4 +1,4 @@
-package com.cakmak.tutorial.models;
+package com.cakmak.tutorial.models.entity;
 
 import javax.persistence.*;
 
@@ -20,7 +20,7 @@ public class ActivityEntity {
     private String detail;
 
     @Column(name = "published")
-    private boolean published;
+    private Boolean published;
 
     public ActivityEntity() {
 
@@ -34,6 +34,10 @@ public class ActivityEntity {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -52,14 +56,6 @@ public class ActivityEntity {
         this.description = description;
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean isPublished) {
-        this.published = isPublished;
-    }
-
     public String getDetail() {
         return detail;
     }
@@ -68,8 +64,11 @@ public class ActivityEntity {
         this.detail = detail;
     }
 
-    @Override
-    public String toString() {
-        return "Activity [id=" + id + ", title=" + title + ", desc=" + description +  ", detail=" + detail + ", published=" + published + "]";
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
     }
 }

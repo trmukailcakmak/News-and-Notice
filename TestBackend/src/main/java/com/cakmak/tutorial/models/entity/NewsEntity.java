@@ -1,4 +1,6 @@
-package com.cakmak.tutorial.models;
+package com.cakmak.tutorial.models.entity;
+
+import com.cakmak.tutorial.models.entity.ActivityEntity;
 
 import javax.persistence.*;
 

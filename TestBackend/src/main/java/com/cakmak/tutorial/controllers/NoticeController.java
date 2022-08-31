@@ -1,6 +1,6 @@
 package com.cakmak.tutorial.controllers;
 
-import com.cakmak.tutorial.models.NoticeEntity;
+import com.cakmak.tutorial.models.entity.NoticeEntity;
 import com.cakmak.tutorial.repository.NoticeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,7 +74,7 @@ public class NoticeController {
 			NoticeEntity notice = oldNoticeData.get();
 			notice.setTitle(newNoticeData.getTitle());
 			notice.setDescription(newNoticeData.getDescription());
-			notice.setPublished(newNoticeData.isPublished());
+			notice.setPublished(newNoticeData.getPublished());
 			return new ResponseEntity<>(noticeRepository.save(notice), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

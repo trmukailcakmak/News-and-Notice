@@ -1,4 +1,4 @@
-package com.cakmak.tutorial.models;
+package com.cakmak.tutorial.models.enm;
 
 public enum ERole {
   ROLE_USER,
