@@ -86,8 +86,6 @@ public class AuthController {
           .badRequest()
           .body(new MessageResponse("Error: Email is already in use!"));
     }
-
-    // Create new user's account
     UserEntity user = new UserEntity(signUpRequest.getUsername(),
                signUpRequest.getEmail(),
                encoder.encode(signUpRequest.getPassword()));
@@ -115,12 +113,6 @@ public class AuthController {
           RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
-
-          break;
-        case "mod":
-          RoleEntity modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
 
           break;
         default:

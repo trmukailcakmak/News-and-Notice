@@ -36,14 +36,4 @@ public interface NewsMapper {
     public static Long requestToEntityConvertIdLongToIdlong(long id){
         return Long.valueOf(id);
     }
-
-    /*@Mappings({@Mapping(source = "price", target = "productPrice", qualifiedByName = "priceToProductPrice"),
-              @Mapping(source="id", target="productId")
-      })
-      public abstract ProductOutput mapProductEntity2Output(ProductEntity productEntity);
-
-      @Named("priceToProductPrice")
-      public static  String priceToProductPrice(BigDecimal price) {
-            return price.toString()+" ?";
-      }*/
 }
