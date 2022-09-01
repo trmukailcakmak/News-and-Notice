@@ -2,6 +2,7 @@ package com.cakmak.tutorial.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,9 +96,18 @@ public class AuthController {
     Set<RoleEntity> roles = new HashSet<>();
 
     if (strRoles == null) {
-      RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
+
+      Optional<RoleEntity> userRole = roleRepository.findByName(ERole.ROLE_USER);
+
+      if(!userRole.isPresent()) {
+        RoleEntity role = new RoleEntity();
+        role.setName(ERole.ROLE_USER);
+        roleRepository.save(role);
+        userRole = roleRepository.findByName(ERole.ROLE_USER);
+      }
+
+      roles.add(userRole.get());
+
     } else {
       strRoles.forEach(role -> {
         switch (role) {
