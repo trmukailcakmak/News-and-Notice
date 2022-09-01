@@ -47,7 +47,7 @@ public class NewsController {
     }
 
     @GetMapping("/news/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<NewsResponse> getNewsById(@PathVariable("id") long id) {
         try{
             ServiceResult<NewsResponse> serviceResult = newsService.getNewsById(id);
@@ -78,7 +78,7 @@ public class NewsController {
     }
 
     @PostMapping("/news")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<NewsResponse> createNews(@RequestBody @Valid NewsRequest news) {
         try {
             ServiceResult<NewsResponse> serviceResult = newsService.createNews(news);
@@ -96,7 +96,7 @@ public class NewsController {
     }
 
     @PutMapping("/news/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<NewsResponse> updateNews(@PathVariable("id") long id, @RequestBody NewsRequest updateDataNewsRequest) {
         try {
             ServiceResult<NewsResponse> serviceResult = newsService.updateNews(id,updateDataNewsRequest);
@@ -111,7 +111,7 @@ public class NewsController {
     }
 
     @DeleteMapping("/news/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteNews(@PathVariable("id") long id) {
         try {
             ServiceResult<HttpStatus> serviceResult = newsService.deleteNews(id);
@@ -127,7 +127,7 @@ public class NewsController {
     }
 
     @DeleteMapping("/news")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteAllNews() {
         try {
             ServiceResult<HttpStatus> serviceResult = newsService.deleteAllNews();
@@ -143,7 +143,7 @@ public class NewsController {
     }
 
     @GetMapping("/news/published")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<NewsResponse>> findByPublished() {
         try {
             ServiceResult<List<NewsResponse>> serviceResult = newsService.findByPublished();

@@ -50,7 +50,7 @@ public class NoticeController {
 	}
 
 	@GetMapping("/notices/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<NoticeResponse> getNewsById(@PathVariable("id") long id) {
 		try{
 			ServiceResult<NoticeResponse> serviceResult = noticeService.getNewsById(id);
@@ -81,7 +81,7 @@ public class NoticeController {
 	}
 
 	@PostMapping("/notices")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<NoticeResponse> createNotice(@RequestBody @Valid NoticeRequest request) {
 		try {
 			ServiceResult<NoticeResponse> serviceResult = noticeService.create(request);
@@ -97,7 +97,7 @@ public class NoticeController {
 	}
 
 	@PutMapping("/notices/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<NoticeResponse> updateNotice(@PathVariable("id") long id, @RequestBody NoticeRequest request) {
 		try {
 			ServiceResult<NoticeResponse> serviceResult = noticeService.update(id,request);
@@ -113,7 +113,7 @@ public class NoticeController {
 	}
 
 	@DeleteMapping("/notices/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteNotice(@PathVariable("id") long id) {
 		try {
 			ServiceResult<HttpStatus> serviceResult = noticeService.delete(id);
@@ -129,7 +129,7 @@ public class NoticeController {
 	}
 
 	@DeleteMapping("/notices")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAllNotice() {
 		try {
 			ServiceResult<HttpStatus> serviceResult = noticeService.deleteAll();
@@ -145,7 +145,7 @@ public class NoticeController {
 	}
 
 	@GetMapping("/notices/published")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<List<NoticeResponse>> findByPublished() {
 		try {
 			ServiceResult<List<NoticeResponse>> serviceResult = noticeService.findByPublished();
