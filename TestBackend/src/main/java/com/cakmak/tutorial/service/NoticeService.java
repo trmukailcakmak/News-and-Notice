@@ -48,7 +48,7 @@ public class NoticeService {
     }
 
 
-    public ServiceResult<NoticeResponse> getNewsById(long id) {
+    public ServiceResult<NoticeResponse> getNoticeById(long id) {
         try {
             Optional<NoticeEntity> noticeDataOptional = noticeRepository.findById(id);
 

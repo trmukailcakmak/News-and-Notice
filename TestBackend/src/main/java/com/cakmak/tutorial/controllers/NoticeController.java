@@ -53,7 +53,7 @@ public class NoticeController {
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public ResponseEntity<NoticeResponse> getNoticeById(@PathVariable("id") long id) {
 		try{
-			ServiceResult<NoticeResponse> serviceResult = noticeService.getNewsById(id);
+			ServiceResult<NoticeResponse> serviceResult = noticeService.getNoticeById(id);
 
 			if (serviceResult.isSuccess()) {
 				return new ResponseEntity<>(serviceResult.getValue(), HttpStatus.OK);
