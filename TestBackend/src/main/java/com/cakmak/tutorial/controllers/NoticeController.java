@@ -33,7 +33,7 @@ public class NoticeController {
 	NoticeService noticeService;
 
 	@GetMapping("/notices")
-	public ResponseEntity<List<NoticeResponse>> getAllNews(@RequestParam(required = false) String title) {
+	public ResponseEntity<List<NoticeResponse>> getAllNotice(@RequestParam(required = false) String title) {
 		try {
 
 			ServiceResult<List<NoticeResponse>> serviceResult = noticeService.getAll(title);
@@ -51,7 +51,7 @@ public class NoticeController {
 
 	@GetMapping("/notices/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-	public ResponseEntity<NoticeResponse> getNewsById(@PathVariable("id") long id) {
+	public ResponseEntity<NoticeResponse> getNoticeById(@PathVariable("id") long id) {
 		try{
 			ServiceResult<NoticeResponse> serviceResult = noticeService.getNewsById(id);
 
