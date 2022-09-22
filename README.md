@@ -1,5 +1,8 @@
 # Tutorials
-PROJECT TOPIC:
+PROJECT TOPIC:    
+Screens and web pages where News and Announcements on an Association's website can be entered dynamically.
+their publication on the website.
+
 
 Used technologies:
 
