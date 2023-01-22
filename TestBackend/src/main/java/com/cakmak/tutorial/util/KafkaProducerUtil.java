@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaProducerUtil {
-    @Value("${kafka.topic.general.name1}")
+    @Value("${kafka.topic.general.name}")
     private String generalNameTopic;
     @Autowired
     private KafkaTemplate<String, MyKafkaDto> kafkaTemplateProducerMyKafkaDto;

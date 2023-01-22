@@ -5,6 +5,7 @@ import com.cakmak.tutorial.models.core.ServiceResult;
 import com.cakmak.tutorial.payload.response.kafka.MyKafkaGeneralResponse;
 import com.cakmak.tutorial.util.KafkaProducerUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,5 +28,11 @@ public class KafkaService {
         } catch (Exception e) {
             return new ServiceResult<>(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    @KafkaListener(topics = "${kafka.topic.general.name}", containerFactory = "myKafkaDtoListenerContainerFactory")
+    public void canNotificationListener(MyKafkaDto myKafkaDto) {
+        System.out.println("Gelen data : "+myKafkaDto.toString());
+        System.out.println("Gelen data : "+myKafkaDto.getName());
     }
 }
